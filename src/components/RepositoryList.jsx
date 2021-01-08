@@ -13,7 +13,7 @@ const repositories = [
   {
     id: 'jaredpalmer.formik',
     fullName: 'jaredpalmer/formik',
-    description: 'Build forms in React, without the tears',
+    description: 'Build forms in React, without the tears.',
     language: 'TypeScript',
     forksCount: 1589,
     stargazersCount: 21553,

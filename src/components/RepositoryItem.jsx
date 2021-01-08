@@ -3,6 +3,9 @@ import { View, StyleSheet, Image } from 'react-native';
 import Text from './Text';
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: '#ffffff'
+  },
   thumbnail: {
     width: 50,
     height: 50,
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
 const RepositoryItem = ({ item }) => {
   
   return (
-    <View>
+    <View style={styles.main}>
       <View style={styles.flexRow}>
         <Image 
           style={styles.thumbnail} 
