@@ -21,7 +21,7 @@ const theme = {
   
   },
   fontWeights: {
-    normal: '400',
+    normal: '500',
     bold: '700',
   },
 };

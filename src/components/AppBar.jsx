@@ -1,8 +1,13 @@
 import React from 'react';
+import { useContext, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Link } from 'react-router-native';
+import { useApolloClient } from '@apollo/react-hooks';
 import Constants from 'expo-constants';
 import Text from './Text';
+import AuthStorageContext from '../contexts/AuthStorageContext';
+import { AUTHORIZED_USER } from '../graphql/queries';
+import { useQuery } from '@apollo/react-hooks';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,6 +29,35 @@ const styles = StyleSheet.create({
 const AppBarTab = ({ text }) => <Text color='textLight'>{text}</Text>;
 
 const AppBar = () => {
+  
+  const authStorage = useContext(AuthStorageContext);
+  const apolloClient = useApolloClient();
+  const loggedUser = useQuery(AUTHORIZED_USER, {
+    refetchQueries: 5000
+  });
+  console.log(loggedUser.data);
+  const [token, setToken] = useState(null);
+  
+  console.log(token);
+
+  
+  const handleLogOut = async (event) => {
+    // console.log('Loggin out');
+    event.preventDefault();
+    await authStorage.removeAccessToken();
+    apolloClient.resetStore();
+    setToken(null);
+  };
+
+  let showIfLogged = 'none';
+  let hideIfLogged = '';
+
+  if (loggedUser?.data?.authorizedUser) {
+    showIfLogged = '';
+    hideIfLogged = 'none';
+  }
+
+  
   return (
     <View style={styles.container}>
       <ScrollView horizontal contentContainerStyle={styles.scrollView}>
@@ -34,13 +68,20 @@ const AppBar = () => {
         </Link>
         </TouchableWithoutFeedback>
       </View>
-      <View>
+      <View display={hideIfLogged}>
         <TouchableWithoutFeedback>
-        <Link to='/signin'>
-          <AppBarTab text='Sign in'/>
-        </Link>
+          <Link to='/signin'>
+            <AppBarTab text='Sign in'/>
+          </Link>
         </TouchableWithoutFeedback>
-        </View>
+      </View>
+      <View display={showIfLogged}>
+        <TouchableWithoutFeedback>
+          <Link to='/' onPress={handleLogOut}>
+            <AppBarTab text='Sign out'/>
+          </Link>
+        </TouchableWithoutFeedback>
+      </View>
       </ScrollView>
     </View>
   );

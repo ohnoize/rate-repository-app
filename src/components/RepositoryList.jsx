@@ -19,7 +19,7 @@ const RepositoryList = () => {
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error</Text>;
 
-  console.log(repositories);
+  // console.log(repositories);
   const repositoryNodes = repositories?.edges?.map(edge => edge.node)
     ?? [];
 
