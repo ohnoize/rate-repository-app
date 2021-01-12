@@ -67,7 +67,7 @@ const AppBar = () => {
           <AppBarTab text='Repositories'/>
         </Link>
         </TouchableWithoutFeedback>
-      </View>
+      </View> 
       <View display={hideIfLogged}>
         <TouchableWithoutFeedback>
           <Link to='/signin'>

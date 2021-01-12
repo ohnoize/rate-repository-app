@@ -22,3 +22,26 @@ export const AUTHORIZED_USER = gql`
     }
   }
 `;
+
+export const GET_SINGLE = gql`
+  query repository($id: ID!) {
+    repository(id: $id) {
+      ...RepositoryItems,
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+${REPOSITORY_ITEMS}  
+`;

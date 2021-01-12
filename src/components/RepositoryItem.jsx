@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { useHistory, useParams } from 'react-router-native';
 import Text from './Text';
+import * as Linking from 'expo-linking';
 
 const styles = StyleSheet.create({
   main: {
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    alignItems: 'center'
   },
   thumbnail: {
     width: 50,
@@ -36,43 +39,73 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 5,
     borderRadius: 5
+  },
+  gitButStyle: {
+    backgroundColor: '#0366d6',
+    marginTop: 5,
+    padding: 5,
+    borderRadius: 5,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 375
+  },
+  touchableStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    width: 375,
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: '#0366d6'
   }
 });
 
 const RepositoryItem = ({ item }) => {
-  
+  const { id } = useParams();
+  console.log(id);
+  const history = useHistory();
   return (
-    <View style={styles.main}>
+    <View testID='repositoryItem' style={styles.main}>
+    <TouchableOpacity onPress={() => history.push(`/${item.id}`)}>
       <View style={styles.flexRow}>
         <Image 
           style={styles.thumbnail} 
           source={{uri: item.ownerAvatarUrl}}/>
           <View style={styles.textBox}>
-            <Text fontWeight='bold'>{item.fullName}</Text>
-            <Text color='textSecondary'>{item.description}</Text>
+            <Text testID='name' fontWeight='bold'>{item.fullName}</Text>
+            <Text testID='description' color='textSecondary'>{item.description}</Text>
             <View style={styles.buttonStyle}>
-              <Text color='textLight'>{item.language} </Text>
+              <Text testID='language' color='textLight'>{item.language} </Text>
             </View>
           </View>
       </View>
       <View style={styles.itemRow}>
         <View style={styles.item}>
-          <Text fontWeight='bold'>{(item.stargazersCount / 1000).toFixed(1)}k</Text>
+          <Text testID='starCount' fontWeight='bold'>{(item.stargazersCount / 1000).toFixed(1)}k</Text>
           <Text>Stars</Text>
         </View>
         <View style={styles.item}>
-          <Text fontWeight='bold'>{(item.forksCount / 1000).toFixed(1)}k</Text>
+          <Text testID='forksCount' fontWeight='bold'>{(item.forksCount / 1000).toFixed(1)}k</Text>
           <Text>Forks</Text>
         </View>
         <View style={styles.item}>
-          <Text fontWeight='bold'>{item.reviewCount}</Text>
+          <Text testID='reviewCount' fontWeight='bold'>{item.reviewCount}</Text>
           <Text>Reviews</Text>
         </View>
         <View style={styles.item}>
-          <Text fontWeight='bold'>{item.ratingAverage}</Text>
+          <Text testID='ratingAverage' fontWeight='bold'>{item.ratingAverage}</Text>
           <Text>Rating</Text>
         </View>
       </View>
+      { id ?
+      <TouchableHighlight style={styles.touchableStyle} onPress={() => Linking.openURL(item.url)}>
+        <View>
+          <Text testID='gitHubURL' color='textLight'>Open in GitHub</Text>
+        </View>
+      </TouchableHighlight>
+     : null }
+    </TouchableOpacity>
     </View>
   );
 };
