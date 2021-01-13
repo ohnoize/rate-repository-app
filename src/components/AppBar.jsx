@@ -67,6 +67,13 @@ const AppBar = () => {
           <AppBarTab text='Repositories'/>
         </Link>
         </TouchableWithoutFeedback>
+      </View>
+      <View>
+        <TouchableWithoutFeedback>
+          <Link to='/review'>
+            <AppBarTab text='Create a review'/>
+          </Link>
+        </TouchableWithoutFeedback>
       </View> 
       <View display={hideIfLogged}>
         <TouchableWithoutFeedback>

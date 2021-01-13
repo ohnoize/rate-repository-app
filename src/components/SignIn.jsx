@@ -66,6 +66,7 @@ const SignIn = () => {
   const [signIn] = useSignIn();
   const onSubmit = async (values) => {
     const { username, password } = values;
+    console.log(username);
     try {
       await signIn({ username, password });
       

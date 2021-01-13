@@ -9,11 +9,12 @@ import { format } from 'date-fns';
 
 const styles = StyleSheet.create({
   reviewContainer: {
+    marginTop: 20,
     flexDirection: 'row',
     backgroundColor: 'white'
   },
   separator: {
-    height: 10,
+    height: 5,
     backgroundColor: '#e1e4e8',
   },
   ratingContainer: {
@@ -60,16 +61,19 @@ const RepositoryPage = () => {
 
   const { id } = useParams();
   
-  const item = useQuery(GET_SINGLE, { variables: { id } });
+  const item = useQuery(GET_SINGLE, { 
+    fetchPolicy: 'cache-and-network',
+    variables: { id } });
   if (item.loading) return null;
   if (item.error) return null;
   const reviews = item.data.repository.reviews.edges;
+  console.log(reviews);
   return (
     <FlatList
       data={reviews}
       renderItem={({ item }) => <ReviewItem review={item}/> }
       ItemSeparatorComponent={ItemSeparator} 
-      keyExtractor={({ id }) => id}
+      keyExtractor={item => item.node.id}
       ListHeaderComponent={() => <RepositoryItem item={item.data.repository} /> }
     />
     
