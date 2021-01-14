@@ -68,14 +68,8 @@ const ItemSeparator = () => <View style={styles.separator} />;
 export class RepositoryListContainer extends React.Component {
   
   renderHeader = () => {
-    const props = this.props;
-    const setArgs = props.setArgs;
-    const title = props.title;
-    const setTitle = props.setTitle;
-    const filter = props.filter;
-    const setFilter = props.setFilter;
-    const value = props.value;
-    const setValue = props.setValue;
+    const { setArgs, title, setTitle, filter, setFilter, value, setValue } = this.props;
+    
     return(
       <MenuComponent 
         setArgs={setArgs} 
@@ -91,6 +85,7 @@ export class RepositoryListContainer extends React.Component {
   
   render() {
     const repositories = this.props.repositories;
+    const onEndReach = this.props.onEndReach;
     const repositoryNodes = repositories?.edges?.map((edge) => edge.node) ?? [];
     const renderItem = ({ item }) => <RepositoryItem item={item} />;
     return (
@@ -100,6 +95,8 @@ export class RepositoryListContainer extends React.Component {
        renderItem={renderItem}
        keyExtractor={item => item.id}
        ListHeaderComponent={this.renderHeader}
+       onEndReachedThreshold={0.5}
+       onEndReached={onEndReach}
      />
     );
   }
@@ -113,17 +110,29 @@ const RepositoryList = () => {
   const [ value, setValue ] = useState('');
   const vars = {
     ...args,
-    searchKeyword: filter
+    searchKeyword: filter,
+    first: 8
   };
-  const { repositories, error, loading } = useRepositories({ vars });
+  const { repositories, error, loading, fetchMore } = useRepositories({ vars });
   const [ title, setTitle ] = useState('Latest repositories');
+  const onEndReach = () => fetchMore();
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error</Text>;
   console.log(filter);
   return (
     <Provider>
     <View>
-      <RepositoryListContainer repositories={repositories} setArgs={setArgs} title={title} setTitle={setTitle} setFilter={setFilter} filter={filter} value={value} setValue={setValue} />      
+      <RepositoryListContainer 
+        repositories={repositories} 
+        setArgs={setArgs} 
+        title={title} 
+        setTitle={setTitle} 
+        setFilter={setFilter} 
+        filter={filter} 
+        value={value} 
+        setValue={setValue}
+        onEndReach={onEndReach}
+     />      
     </View>
     </Provider>
   );

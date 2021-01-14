@@ -4,24 +4,47 @@ import { GET_REPOSITORIES } from '../graphql/queries';
 
 const useRepositories = ({ vars }) => {
   
-  // const [loading, setLoading] = useState(false);
-  console.log(vars);
-  const { orderBy, orderDirection, searchKeyword } = vars;
-  const { loading, error, data } = useQuery(GET_REPOSITORIES, {
+
+
+  const { orderBy, orderDirection, searchKeyword, first } = vars;
+  const { loading, error, data, fetchMore } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
-    variables: { orderBy, orderDirection, searchKeyword }
+    variables: { orderBy, orderDirection, searchKeyword, first }
   });
 
-  // const fetchRepositories = async () => {
-  //   setLoading(true);
-  //   const response = await fetch('http://192.168.1.156:5000/api/repositories');
-  //   const json = await response.json();
-  //   setRepositories(json);
-  //   setLoading(false);
-  // };
+  const handleFetchMore = () => {
+    const canFetchMore =
+      !loading && data && data.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      query: GET_REPOSITORIES,
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...vars
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const nextResult = {
+          repositories: {
+            ...fetchMoreResult.repositories,
+            edges: [
+              ...previousResult.repositories.edges,
+              ...fetchMoreResult.repositories.edges
+            ],
+          },
+        };
+        return nextResult;
+      },
+    });
+
+  };
 
   return { 
     repositories: data ? data.repositories : undefined, 
+    fetchMore: handleFetchMore,
     error, 
     loading };
 };
