@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 
 const ReviewItem = ({ review }) => {
   const date = format(new Date(review.node.createdAt), "dd.MM.yyyy");
-  console.log(date);
+  // console.log(date);
   return(
     <View style={styles.reviewContainer}>
     <View style={styles.ratingContainer}>
@@ -67,7 +67,7 @@ const RepositoryPage = () => {
   if (item.loading) return null;
   if (item.error) return null;
   const reviews = item.data.repository.reviews.edges;
-  console.log(reviews);
+  // console.log(reviews);
   return (
     <FlatList
       data={reviews}

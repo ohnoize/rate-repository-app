@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import Text from './Text';
 import FormikTextInput from './FormikTextInput';
 import useSignIn from '../hooks/useSignIn';
+import { CREATE_USER } from '../graphql/mutations';
+import { useMutation } from '@apollo/react-hooks';
 
 
 const styles = StyleSheet.create({
@@ -34,42 +36,52 @@ const styles = StyleSheet.create({
 
 const initialValues = {
   username: '',
-  password: ''
+  password: '',
+  confirmPassword: ''
 };
 
 const validationSchema = yup.object().shape({
   username: yup
     .string()
+    .min(1)
+    .max(30)
     .required('username is required'),
   password: yup
     .string()
-    .required('password is required')
+    .min(5)
+    .max(50)
+    .required('password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords need to match')
+    .required('password confirmation required')
 });
 
-
-export const SignInForm = ({ onSubmit }) => {
+export const SignUpForm = ({ onSubmit }) => {
   return (
     <View style={styles.form}>
       <FormikTextInput testID='username' style={styles.inputField} name='username' placeholder='Username' />
       <FormikTextInput testID='password' style={styles.inputField} name='password' placeholder='Password' secureTextEntry={true} />
+      <FormikTextInput testID='confirmPassword' style={styles.inputField} name='confirmPassword' placeholder='Confirm Password' secureTextEntry={true} />
       <View style={styles.button}>
       <TouchableWithoutFeedback testID='submitButton' onPress={onSubmit}>
-        <Text color='textLight'>Sign in</Text>
+        <Text color='textLight'>Sign up</Text>
       </TouchableWithoutFeedback>
       </View>
     </View>
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
   const history = useHistory();
   const [signIn] = useSignIn();
+  const [createUser] = useMutation(CREATE_USER);
   const onSubmit = async (values) => {
     const { username, password } = values;
-    // console.log(username);
+    // console.log(username, password);
     try {
+      await createUser({ variables: { username, password } });
       await signIn({ username, password });
-      
       history.push('/');
     } catch (e) {
       console.log(e);
@@ -82,10 +94,10 @@ const SignIn = () => {
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {({handleSubmit}) => <SignInForm onSubmit={handleSubmit} />}
+      {({handleSubmit}) => <SignUpForm onSubmit={handleSubmit} />}
     </Formik>
   );
 };
 
 
-export default SignIn;
+export default SignUp;

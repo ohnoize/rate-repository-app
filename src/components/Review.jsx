@@ -79,7 +79,7 @@ const Review = () => {
     const { ownerName, repositoryName, rating, text } = values;
     
     try {
-     console.log(repositoryName);
+    //  console.log(repositoryName);
      const response = await addReview({ variables: { 
        ownerName, 
        repositoryName, 

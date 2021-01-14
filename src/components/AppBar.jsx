@@ -35,10 +35,9 @@ const AppBar = () => {
   const loggedUser = useQuery(AUTHORIZED_USER, {
     refetchQueries: 5000
   });
-  console.log(loggedUser.data);
-  const [token, setToken] = useState(null);
-  
-  console.log(token);
+  // console.log(loggedUser.data);
+  const [, setToken] = useState(null);
+ 
 
   
   const handleLogOut = async (event) => {
@@ -79,6 +78,13 @@ const AppBar = () => {
         <TouchableWithoutFeedback>
           <Link to='/signin'>
             <AppBarTab text='Sign in'/>
+          </Link>
+        </TouchableWithoutFeedback>
+      </View>
+      <View display={hideIfLogged}>
+        <TouchableWithoutFeedback>
+          <Link to='/signup'>
+            <AppBarTab text='Sign Up'/>
           </Link>
         </TouchableWithoutFeedback>
       </View>
