@@ -10,6 +10,12 @@ export const AUTHORIZE = gql`
   }
 `;
 
+export const DELETE_REVIEW = gql`
+  mutation deleteReview($id: ID!) {
+    deleteReview(id: $id)
+  }
+`;
+
 export const ADD_REVIEW = gql`
   mutation createReview($repositoryName: String!, $ownerName: String!, $rating: Int!, $text: String) {
     createReview(review: {

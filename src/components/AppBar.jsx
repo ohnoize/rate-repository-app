@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
 import { useApolloClient } from '@apollo/react-hooks';
 import Constants from 'expo-constants';
 import Text from './Text';
@@ -29,16 +29,17 @@ const styles = StyleSheet.create({
 const AppBarTab = ({ text }) => <Text color='textLight'>{text}</Text>;
 
 const AppBar = () => {
-  
+  const history = useHistory();
   const authStorage = useContext(AuthStorageContext);
   const apolloClient = useApolloClient();
   const loggedUser = useQuery(AUTHORIZED_USER, {
     refetchQueries: 5000
   });
   // console.log(loggedUser.data);
-  const [, setToken] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [token, setToken] = useState(null);
  
-
+  
   
   const handleLogOut = async (event) => {
     // console.log('Loggin out');
@@ -46,6 +47,7 @@ const AppBar = () => {
     await authStorage.removeAccessToken();
     apolloClient.resetStore();
     setToken(null);
+    history.push('/');
   };
 
   let showIfLogged = 'none';
@@ -71,6 +73,13 @@ const AppBar = () => {
         <TouchableWithoutFeedback>
           <Link to='/review'>
             <AppBarTab text='Create a review'/>
+          </Link>
+        </TouchableWithoutFeedback>
+      </View>
+      <View display={showIfLogged}>
+        <TouchableWithoutFeedback>
+          <Link to='/myreviews'>
+            <AppBarTab text='My Reviews'/>
           </Link>
         </TouchableWithoutFeedback>
       </View> 

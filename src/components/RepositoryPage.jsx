@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   const date = format(new Date(review.node.createdAt), "dd.MM.yyyy");
   // console.log(date);
   return(
@@ -54,7 +54,7 @@ const ReviewItem = ({ review }) => {
   );
 };
 
-const ItemSeparator = () => <View style={styles.separator} />;
+export const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryPage = () => {
 
@@ -64,7 +64,9 @@ const RepositoryPage = () => {
   
   if (loading) return null;
   if (error) return null;
-  const reviews = data.repository.reviews.edges;
+  if (!data) return null;
+
+  const reviews = data?.repository?.reviews?.edges ?? [];
   const onEndReach = () => fetchMore();
   console.log(data);
   // console.log(reviews);

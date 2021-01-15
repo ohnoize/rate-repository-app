@@ -22,19 +22,21 @@ ${REPOSITORY_ITEMS}
 `;
 
 export const AUTHORIZED_USER = gql`
-  query {
+  query authorizedUser($includeReviews: Boolean = false){
     authorizedUser {
       id
       username
-      reviews {
+      reviews @include(if: $includeReviews){
         edges {
           node {
             repository {
               name
             }
+            id
             rating
             text
             createdAt
+            repositoryId
           }
         }
       }

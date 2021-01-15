@@ -10,6 +10,7 @@ import SignUp from './SignUp';
 // import Text from './Text';
 import AppBar from './AppBar';
 import theme from '../theme';
+import MyReviews from './MyReviews';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +32,9 @@ const Main = () => {
         </Route>
         <Route path='/review' exact>
           <Review />
+        </Route>
+        <Route path='/myreviews' exact>
+          <MyReviews />
         </Route>
         <Route path='/signin' exact>
           <SignIn />

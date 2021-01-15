@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
 const RepositoryItem = ({ item }) => {
   const { id } = useParams();
-  // console.log(id);
+  
   const history = useHistory();
   return (
     <View testID='repositoryItem' style={styles.main}>

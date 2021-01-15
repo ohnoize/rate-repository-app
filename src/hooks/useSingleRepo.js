@@ -28,10 +28,10 @@ const useSingleRepo = ({ vars }) => {
             ...previousResult.repository,
             reviews: {
               ...previousResult.repository.reviews,
-            edges: [
-              ...previousResult.repository.reviews.edges,
-              ...fetchMoreResult.repository.reviews.edges
-            ],
+              edges: [
+                ...previousResult.repository.reviews.edges,
+                ...fetchMoreResult.repository.reviews.edges
+              ],
             pageInfo: fetchMoreResult.repository.reviews.pageInfo
           }
           }
